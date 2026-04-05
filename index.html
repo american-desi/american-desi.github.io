@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AmericanDesi — Builder · Teacher · Systems Thinker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0f14;
+      --surface:  #161a23;
+      --border:   #252b38;
+      --accent:   #6c8cff;
+      --accent2:  #a78bfa;
+      --text:     #e8eaf0;
+      --muted:    #7a8099;
+      --card-bg:  #1a1f2e;
+      --glow:     rgba(108, 140, 255, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background grid ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(108,140,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,140,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Noise overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 0 60px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108,140,255,.1);
+      border: 1px solid rgba(108,140,255,.25);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      width: fit-content;
+    }
+
+    .badge .dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.7); }
+    }
+
+    .hero-name {
+      font-size: clamp(48px, 10vw, 88px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(16px, 3vw, 22px);
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: .04em;
+      margin-bottom: 48px;
+    }
+
+    .hero-tagline span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-desc {
+      max-width: 520px;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #9ba3be;
+      margin-bottom: 52px;
+    }
+
+    /* ── Social links ── */
+    .links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .2s ease;
+      border: 1.5px solid transparent;
+    }
+
+    .link-btn.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 24px rgba(108,140,255,.35);
+    }
+    .link-btn.primary:hover {
+      background: #7d9dff;
+      box-shadow: 0 0 36px rgba(108,140,255,.55);
+      transform: translateY(-1px);
+    }
+
+    .link-btn.secondary {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .link-btn.secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* ── Section ── */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.15;
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    /* ── Project cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top left, var(--glow), transparent 70%);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .card:hover {
+      border-color: rgba(108,140,255,.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(108,140,255,.15);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: rgba(108,140,255,.12);
+      color: var(--accent);
+      border: 1px solid rgba(108,140,255,.2);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .card-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 4px;
+      transition: gap .2s;
+    }
+
+    .card:hover .card-arrow { gap: 10px; }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #9ba3be;
+    }
+
+    .about-text strong { color: var(--text); }
+
+    .skills {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .skill-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .skill-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .skill-label span { color: var(--muted); }
+
+    .skill-bar {
+      height: 5px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0;
+      transition: width 1s ease;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer p { font-size: 13px; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 64px;
+      animation: fadeUp 1s ease 1s both;
+    }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-name, .badge, .hero-tagline, .hero-desc, .links {
+      animation: fadeUp .8s ease both;
+    }
+    .badge        { animation-delay: 0s; }
+    .hero-name    { animation-delay: .1s; }
+    .hero-tagline { animation-delay: .2s; }
+    .hero-desc    { animation-delay: .3s; }
+    .links        { animation-delay: .4s; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> Available for collaboration</div>
+    <h1 class="hero-name">American<br>Desi</h1>
+    <p class="hero-tagline">
+      <span>Builder</span> · <span>Teacher</span> · <span>Systems Thinker</span>
+    </p>
+    <p class="hero-desc">
+      I build things that make people think differently — interactive tools, educational experiments,
+      and systems that turn complexity into clarity. Code is my medium; curiosity is the engine.
+    </p>
+    <div class="links">
+      <a href="https://github.com/American-desi" class="link-btn primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+      <a href="#projects" class="link-btn secondary">View Projects ↓</a>
+    </div>
+    <div class="scroll-hint"><div class="scroll-line"></div> scroll to explore</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Projects ── -->
+  <section class="section" id="projects">
+    <p class="section-label">// open source</p>
+    <h2 class="section-title">Things I've Built</h2>
+    <div class="cards">
+
+      <a href="https://american-desi.github.io/probability-lab/" class="card" id="c1">
+        <div class="card-icon">🎲</div>
+        <div class="card-meta"><span class="card-tag">Math · Interactive</span></div>
+        <h3>Probability Lab</h3>
+        <p>Dice rollers, coin flippers, and live histograms that visually demonstrate the law of large numbers. Watch randomness become pattern.</p>
+        <div class="card-arrow">Explore lab →</div>
+      </a>
+
+      <a href="https://american-desi.github.io/stock-ticker-sim/" class="card" id="c2">
+        <div class="card-icon">📈</div>
+        <div class="card-meta"><span class="card-tag">Game · Finance</span></div>
+        <h3>Stock Ticker Sim</h3>
+        <p>Trade fictional stocks in a live mini-market. Randomized price movement, portfolio tracking, and net worth — all in your browser.</p>
+        <div class="card-arrow">Start trading →</div>
+      </a>
+
+      <a href="https://american-desi.github.io/fractal-explorer/" class="card" id="c3">
+        <div class="card-icon">🌀</div>
+        <div class="card-meta"><span class="card-tag">Math · Art</span></div>
+        <h3>Fractal Explorer</h3>
+        <p>Render the Mandelbrot set on canvas. Click to zoom, swap color palettes, tune iteration depth. Where math becomes something beautiful.</p>
+        <div class="card-arrow">Start exploring →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── About ── -->
+  <section class="section" id="about">
+    <p class="section-label">// about</p>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a <strong>builder and educator</strong> who loves the intersection of code, math, and human understanding.</p>
+        <br>
+        <p>My work focuses on making complex systems <strong>legible and interactive</strong> — whether that's a probability simulation, a financial model, or a mathematical visualization.</p>
+        <br>
+        <p>I think the best way to understand something is to <strong>play with it</strong>. That's why everything I build is interactive first.</p>
+      </div>
+      <div class="skills" id="skills">
+        <div class="skill-row">
+          <div class="skill-label">Systems Design <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">JavaScript / Web <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Data Visualization <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Math / Probability <span>Proficient</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="80"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Teaching / Writing <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 <a href="https://github.com/American-desi">AmericanDesi</a> — Built with care, shipped with intent.</p>
+    <p><a href="https://github.com/American-desi">GitHub</a></p>
+  </footer>
+</div>
+
+<script>
+  // Skill bars on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-fill').forEach(el => {
+          el.style.width = el.dataset.w + '%';
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .3 });
+  observer.observe(document.getElementById('skills'));
+
+  // Card entrance animation
+  const cards = document.querySelectorAll('.card');
+  const cardObserver = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = `fadeUp .6s ease ${i * .1}s both`;
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .15 });
+  cards.forEach(c => cardObserver.observe(c));
+</script>
+</body>
+</html>
