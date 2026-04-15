@@ -1,0 +1,45 @@
+# Caddy reverse proxy config for the AI content platform admin.
+# Put your admin hostname in the ADMIN_HOST env var when deploying.
+# Caddy automatically obtains + renews a Let's Encrypt cert for this host.
+#
+# Usage on VPS:
+#   sudo ADMIN_HOST=admin.example.com caddy run --config /etc/caddy/Caddyfile
+# Or with systemd, set Environment=ADMIN_HOST=admin.example.com in the unit file.
+
+{
+	# Global options
+	email admin@localhost
+	admin off
+	auto_https disable_redirects
+}
+
+{$ADMIN_HOST} {
+	encode zstd gzip
+
+	# Health endpoints bypass any auth.
+	@health path /healthz /readyz
+	handle @health {
+		reverse_proxy localhost:8080
+	}
+
+	# Protect everything else with HTTP basic auth.
+	# Generate hash with: caddy hash-password
+	# Then set ADMIN_USER and ADMIN_PASSWORD_HASH env vars.
+	basic_auth {
+		{$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
+	}
+
+	reverse_proxy localhost:8080 {
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+	}
+
+	# Structured JSON access log.
+	log {
+		output file /var/log/caddy/admin.access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		format json
+	}
+}

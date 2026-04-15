@@ -1,0 +1,28 @@
+[Unit]
+Description=AI Content Platform (Go backend)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=platform
+Group=platform
+WorkingDirectory=/opt/platform
+EnvironmentFile=/etc/platform/env
+ExecStart=/opt/platform/bin/server
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=30s
+KillSignal=SIGTERM
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/platform/data /var/log/platform
+StandardOutput=append:/var/log/platform/server.log
+StandardError=append:/var/log/platform/server.err
+
+[Install]
+WantedBy=multi-user.target
