@@ -1,594 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AmericanDesi — Builder · Teacher · Systems Thinker</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:       #0d0f14;
-      --surface:  #161a23;
-      --border:   #252b38;
-      --accent:   #6c8cff;
-      --accent2:  #a78bfa;
-      --text:     #e8eaf0;
-      --muted:    #7a8099;
-      --card-bg:  #1a1f2e;
-      --glow:     rgba(108, 140, 255, 0.15);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── Background grid ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(108,140,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(108,140,255,.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── Noise overlay ── */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px 0 60px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(108,140,255,.1);
-      border: 1px solid rgba(108,140,255,.25);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 36px;
-      width: fit-content;
-    }
-
-    .badge .dot {
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: .5; transform: scale(.7); }
-    }
-
-    .hero-name {
-      font-size: clamp(48px, 10vw, 88px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 20px;
-    }
-
-    .hero-tagline {
-      font-size: clamp(16px, 3vw, 22px);
-      color: var(--muted);
-      font-weight: 400;
-      letter-spacing: .04em;
-      margin-bottom: 48px;
-    }
-
-    .hero-tagline span {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .hero-desc {
-      max-width: 520px;
-      font-size: 17px;
-      line-height: 1.75;
-      color: #9ba3be;
-      margin-bottom: 52px;
-    }
-
-    /* ── Social links ── */
-    .links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 22px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all .2s ease;
-      border: 1.5px solid transparent;
-    }
-
-    .link-btn.primary {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 0 24px rgba(108,140,255,.35);
-    }
-    .link-btn.primary:hover {
-      background: #7d9dff;
-      box-shadow: 0 0 36px rgba(108,140,255,.55);
-      transform: translateY(-1px);
-    }
-
-    .link-btn.secondary {
-      background: var(--surface);
-      color: var(--text);
-      border-color: var(--border);
-    }
-    .link-btn.secondary:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    /* ── Section ── */
-    .section {
-      padding: 80px 0;
-    }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 700;
-      letter-spacing: -.02em;
-      line-height: 1.15;
-      margin-bottom: 48px;
-      color: var(--text);
-    }
-
-    /* ── Project cards ── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      text-decoration: none;
-      color: inherit;
-      transition: all .25s ease;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at top left, var(--glow), transparent 70%);
-      opacity: 0;
-      transition: opacity .3s;
-    }
-
-    .card:hover {
-      border-color: rgba(108,140,255,.5);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(108,140,255,.15);
-    }
-
-    .card:hover::before { opacity: 1; }
-
-    .card-icon {
-      font-size: 32px;
-      line-height: 1;
-    }
-
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .card-tag {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      background: rgba(108,140,255,.12);
-      color: var(--accent);
-      border: 1px solid rgba(108,140,255,.2);
-      padding: 3px 10px;
-      border-radius: 100px;
-    }
-
-    .card h3 {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      color: var(--text);
-    }
-
-    .card p {
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--muted);
-      flex: 1;
-    }
-
-    .card-arrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent);
-      margin-top: 4px;
-      transition: gap .2s;
-    }
-
-    .card:hover .card-arrow { gap: 10px; }
-
-    /* ── About ── */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    @media (max-width: 600px) {
-      .about-grid { grid-template-columns: 1fr; }
-    }
-
-    .about-text {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #9ba3be;
-    }
-
-    .about-text strong { color: var(--text); }
-
-    .skills {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .skill-row {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .skill-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .skill-label span { color: var(--muted); }
-
-    .skill-bar {
-      height: 5px;
-      background: var(--border);
-      border-radius: 100px;
-      overflow: hidden;
-    }
-
-    .skill-fill {
-      height: 100%;
-      border-radius: 100px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      width: 0;
-      transition: width 1s ease;
-    }
-
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    footer p { font-size: 13px; color: var(--muted); }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0;
-    }
-
-    /* ── Scroll indicator ── */
-    .scroll-hint {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 64px;
-      animation: fadeUp 1s ease 1s both;
-    }
-
-    .scroll-line {
-      width: 40px;
-      height: 1px;
-      background: var(--border);
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-name, .badge, .hero-tagline, .hero-desc, .links {
-      animation: fadeUp .8s ease both;
-    }
-    .badge        { animation-delay: 0s; }
-    .hero-name    { animation-delay: .1s; }
-    .hero-tagline { animation-delay: .2s; }
-    .hero-desc    { animation-delay: .3s; }
-    .links        { animation-delay: .4s; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Projects — Josh Thomas</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#0a0a0f; --fg:#f5f4f0; --muted:#8a8a92; --card:#13131a; --border:rgba(255,255,255,0.08); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg);font:16px/1.6 'Inter Tight',system-ui,sans-serif;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;
+    background:radial-gradient(ellipse at 15% 20%,rgba(255,107,53,.15),transparent 55%),
+               radial-gradient(ellipse at 85% 75%,rgba(78,205,196,.13),transparent 55%),
+               radial-gradient(ellipse at 50% 50%,rgba(155,89,182,.07),transparent 70%);
+    filter:blur(60px);}
+  .wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:60px 32px 100px}
+  header{margin-bottom:60px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+  .eyebrow{font:500 11px 'JetBrains Mono',monospace;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+  h1{font:400 clamp(3rem,8vw,6rem)/1.05 'Instrument Serif',serif;letter-spacing:-.02em;margin-bottom:16px;
+    background:linear-gradient(135deg,#fff,#888 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font:400 clamp(1.1rem,2.1vw,1.4rem)/1.5 'Instrument Serif',serif;font-style:italic;color:#b5b5bd;max-width:760px;margin-bottom:24px}
+  .stats{display:flex;gap:32px;flex-wrap:wrap;font:13px 'JetBrains Mono',monospace;color:var(--muted)}
+  .stats strong{color:var(--fg);font-weight:500}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;
+    text-decoration:none;color:var(--fg);transition:all .2s;display:flex;flex-direction:column;gap:10px}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+  .badge{display:inline-block;font:500 10px 'JetBrains Mono',monospace;letter-spacing:.15em;
+    padding:5px 9px;border-radius:4px;text-transform:uppercase;border:1px solid;align-self:flex-start}
+  .card h3{font:500 19px 'Inter Tight',sans-serif;color:var(--fg);margin-top:4px}
+  .card p{color:#a0a0a8;font-size:14px;flex:1}
+  .row{display:flex;align-items:center;justify-content:space-between;font:12px 'JetBrains Mono',monospace;
+    padding-top:12px;border-top:1px solid var(--border);margin-top:8px}
+  .repo{color:var(--muted)}
+  .src{color:var(--accent);text-decoration:none}
+  .src:hover{text-decoration:underline}
+  footer{margin-top:80px;padding-top:32px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'JetBrains Mono',monospace}
+  footer a{color:#4ecdc4;text-decoration:none}
+</style>
 </head>
 <body>
-<div class="container">
-
-  <!-- ── Hero ── -->
-  <section class="hero">
-    <div class="badge"><span class="dot"></span> Available for collaboration</div>
-    <h1 class="hero-name">American<br>Desi</h1>
-    <p class="hero-tagline">
-      <span>Builder</span> · <span>Teacher</span> · <span>Systems Thinker</span>
-    </p>
-    <p class="hero-desc">
-      I build things that make people think differently — interactive tools, educational experiments,
-      and systems that turn complexity into clarity. Code is my medium; curiosity is the engine.
-    </p>
-    <div class="links">
-      <a href="https://github.com/American-desi" class="link-btn primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-        GitHub
-      </a>
-      <a href="#projects" class="link-btn secondary">View Projects ↓</a>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Projects · Live previews</div>
+    <h1>Josh Thomas</h1>
+    <p class="lede">35 projects deployed to GitHub. Each tile opens its live preview on GitHub Pages. The "view source" links go to the repository.</p>
+    <div class="stats">
+      <div><strong>35</strong> repos</div>
+      <div><strong>GitHub:</strong> <a href="https://github.com/american-desi" style="color:#4ecdc4">@american-desi</a></div>
+      <div><strong>Stack:</strong> Vite · Next.js · Python · Swift · pnpm · static</div>
     </div>
-    <div class="scroll-hint"><div class="scroll-line"></div> scroll to explore</div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Projects ── -->
-  <section class="section" id="projects">
-    <p class="section-label">// open source</p>
-    <h2 class="section-title">Things I've Built</h2>
-    <div class="cards">
-
-      <a href="https://american-desi.github.io/probability-lab/" class="card" id="c1">
-        <div class="card-icon">🎲</div>
-        <div class="card-meta"><span class="card-tag">Math · Interactive</span></div>
-        <h3>Probability Lab</h3>
-        <p>Dice rollers, coin flippers, and live histograms that visually demonstrate the law of large numbers. Watch randomness become pattern.</p>
-        <div class="card-arrow">Explore lab →</div>
-      </a>
-
-      <a href="https://american-desi.github.io/stock-ticker-sim/" class="card" id="c2">
-        <div class="card-icon">📈</div>
-        <div class="card-meta"><span class="card-tag">Game · Finance</span></div>
-        <h3>Stock Ticker Sim</h3>
-        <p>Trade fictional stocks in a live mini-market. Randomized price movement, portfolio tracking, and net worth — all in your browser.</p>
-        <div class="card-arrow">Start trading →</div>
-      </a>
-
-      <a href="https://american-desi.github.io/fractal-explorer/" class="card" id="c3">
-        <div class="card-icon">🌀</div>
-        <div class="card-meta"><span class="card-tag">Math · Art</span></div>
-        <h3>Fractal Explorer</h3>
-        <p>Render the Mandelbrot set on canvas. Click to zoom, swap color palettes, tune iteration depth. Where math becomes something beautiful.</p>
-        <div class="card-arrow">Start exploring →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/ai-classroom-chat" class="card" id="c4">
-        <div class="card-icon">🤖</div>
-        <div class="card-meta"><span class="card-tag">AI · Education</span></div>
-        <h3>AI Classroom Chat</h3>
-        <p>An AI-powered chat tool built for the classroom — bringing conversational intelligence into the learning experience.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/edusphere" class="card" id="c5">
-        <div class="card-icon">🎓</div>
-        <div class="card-meta"><span class="card-tag">Education · Portfolio</span></div>
-        <h3>EduSphere</h3>
-        <p>An education portfolio showcasing projects, lessons, and experiments at the intersection of teaching and technology.</p>
-        <div class="card-arrow">View portfolio →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/bostonHousing_MLNDP1" class="card" id="c6">
-        <div class="card-icon">🏠</div>
-        <div class="card-meta"><span class="card-tag">ML · Data Science</span></div>
-        <h3>Boston Housing ML</h3>
-        <p>Udacity Machine Learning Nanodegree project — predicting Boston housing prices using regression models and feature analysis.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/testingRstudio" class="card" id="c7">
-        <div class="card-icon">📊</div>
-        <div class="card-meta"><span class="card-tag">Data Science · R</span></div>
-        <h3>Testing RStudio</h3>
-        <p>Early data science experiments in R — the beginning of a journey into statistical computing, data wrangling, and exploratory analysis.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/go" class="card" id="c8">
-        <div class="card-icon">🐹</div>
-        <div class="card-meta"><span class="card-tag">Go · Systems</span></div>
-        <h3>Go Experiments</h3>
-        <p>Explorations in Go — learning the language through small programs, concurrency patterns, and systems-level thinking.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/qlp_lab" class="card" id="c9">
-        <div class="card-icon">🔬</div>
-        <div class="card-meta"><span class="card-tag">Lab · Experiments</span></div>
-        <h3>QLP Lab</h3>
-        <p>A sandbox for experiments and prototypes — where ideas get tested, broken, and rebuilt into something worth keeping.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://github.com/American-desi/temp_add_to_version_control" class="card" id="c10">
-        <div class="card-icon">🗂️</div>
-        <div class="card-meta"><span class="card-tag">Tools · Workflow</span></div>
-        <h3>Version Control Lab</h3>
-        <p>A scratchpad for learning and experimenting with version control workflows — the kind of repo every developer needs at the start.</p>
-        <div class="card-arrow">View project →</div>
-      </a>
-
-      <a href="https://american-desi.github.io/Blindspot/" class="card" id="c11">
-        <div class="card-icon">👁️</div>
-        <div class="card-meta"><span class="card-tag">React · Vision</span></div>
-        <h3>Blindspot</h3>
-        <p>A React-powered blind-spot detector — an interactive tool that reveals the eye's natural blind spot through guided visual experiments.</p>
-        <div class="card-arrow">Try it →</div>
-      </a>
-
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── About ── -->
-  <section class="section" id="about">
-    <p class="section-label">// about</p>
-    <h2 class="section-title">Who I Am</h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>I'm a <strong>builder and educator</strong> who loves the intersection of code, math, and human understanding.</p>
-        <br>
-        <p>My work focuses on making complex systems <strong>legible and interactive</strong> — whether that's a probability simulation, a financial model, or a mathematical visualization.</p>
-        <br>
-        <p>I think the best way to understand something is to <strong>play with it</strong>. That's why everything I build is interactive first.</p>
-      </div>
-      <div class="skills" id="skills">
-        <div class="skill-row">
-          <div class="skill-label">Systems Design <span>Advanced</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
-        </div>
-        <div class="skill-row">
-          <div class="skill-label">JavaScript / Web <span>Advanced</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
-        </div>
-        <div class="skill-row">
-          <div class="skill-label">Data Visualization <span>Advanced</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
-        </div>
-        <div class="skill-row">
-          <div class="skill-label">Math / Probability <span>Proficient</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="80"></div></div>
-        </div>
-        <div class="skill-row">
-          <div class="skill-label">Teaching / Writing <span>Advanced</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  </header>
+  <div class="grid">
+<a class="card" href="https://american-desi.github.io/Portfolio/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Portfolio Organizer + Continuum</h3>
+  <p>Standalone interactive React portfolio tool</p>
+  <div class="row">
+    <span class="repo">Portfolio</span>
+    <a class="src" href="https://github.com/american-desi/Portfolio" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/chaos-theory-viz/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Chaos Theory Explorer</h3>
+  <p>Interactive Lorenz, logistic map, Mandelbrot, double pendulum</p>
+  <div class="row">
+    <span class="repo">chaos-theory-viz</span>
+    <a class="src" href="https://github.com/american-desi/chaos-theory-viz" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/community-wallet/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>Community Wallet</h3>
+  <p>Shared financial infrastructure (React 19 + Vite)</p>
+  <div class="row">
+    <span class="repo">community-wallet</span>
+    <a class="src" href="https://github.com/american-desi/community-wallet" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/crypto-voting-system/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Cryptographic Voting</h3>
+  <p>Homomorphic tallying + ZKPs for verifiable elections</p>
+  <div class="row">
+    <span class="repo">crypto-voting-system</span>
+    <a class="src" href="https://github.com/american-desi/crypto-voting-system" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/epidemic-sim/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Spatial Epidemic Simulator</h3>
+  <p>Agent-based SEIRD pandemic modeling</p>
+  <div class="row">
+    <span class="repo">epidemic-sim</span>
+    <a class="src" href="https://github.com/american-desi/epidemic-sim" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/faith/" target="_blank" rel="noopener" style="--accent:#d4a574">
+  <span class="badge" style="background:#d4a5741a;color:#d4a574;border-color:#d4a57440">Monorepo</span>
+  <h3>LUMEN</h3>
+  <p>Operating system for the global Catholic Church</p>
+  <div class="row">
+    <span class="repo">faith</span>
+    <a class="src" href="https://github.com/american-desi/faith" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/fluid-dynamics-sim/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Fluid Dynamics</h3>
+  <p>WebGL2 stable fluids — Jos Stam method</p>
+  <div class="row">
+    <span class="repo">fluid-dynamics-sim</span>
+    <a class="src" href="https://github.com/american-desi/fluid-dynamics-sim" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/forge/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>Forge</h3>
+  <p>React + TypeScript + Vite + Tailwind + Router</p>
+  <div class="row">
+    <span class="repo">forge</span>
+    <a class="src" href="https://github.com/american-desi/forge" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/fractal-music-gen/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Fractal Music Generator</h3>
+  <p>Music from L-systems, fractals, cellular automata</p>
+  <div class="row">
+    <span class="repo">fractal-music-gen</span>
+    <a class="src" href="https://github.com/american-desi/fractal-music-gen" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/games/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Games</h3>
+  <p>HTML5 games: Aurora Drift, Bonkers Blitz, Math Mania, Math Relay</p>
+  <div class="row">
+    <span class="repo">games</span>
+    <a class="src" href="https://github.com/american-desi/games" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/genetic-city-optimizer/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Genetic City Optimizer</h3>
+  <p>Multi-objective GA over urban grids</p>
+  <div class="row">
+    <span class="repo">genetic-city-optimizer</span>
+    <a class="src" href="https://github.com/american-desi/genetic-city-optimizer" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/halo/" target="_blank" rel="noopener" style="--accent:#c39bd3">
+  <span class="badge" style="background:#c39bd31a;color:#c39bd3;border-color:#c39bd340">Swift · iOS</span>
+  <h3>Halo</h3>
+  <p>iOS app — Swift + Firebase</p>
+  <div class="row">
+    <span class="repo">halo</span>
+    <a class="src" href="https://github.com/american-desi/halo" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/k12-admissions-hub/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>NYC K-12 Admissions Hub</h3>
+  <p>Mobile-first multilingual admissions navigator</p>
+  <div class="row">
+    <span class="repo">k12-admissions-hub</span>
+    <a class="src" href="https://github.com/american-desi/k12-admissions-hub" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/kindred/" target="_blank" rel="noopener" style="--accent:#4ecdc4">
+  <span class="badge" style="background:#4ecdc41a;color:#4ecdc4;border-color:#4ecdc440">FastAPI + React</span>
+  <h3>Kindred</h3>
+  <p>AI relationship therapy (FastAPI + React)</p>
+  <div class="row">
+    <span class="repo">kindred</span>
+    <a class="src" href="https://github.com/american-desi/kindred" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/knowledge-graph-explorer/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Knowledge Graph Explorer</h3>
+  <p>NLP entity/relation extraction, no ML libs</p>
+  <div class="row">
+    <span class="repo">knowledge-graph-explorer</span>
+    <a class="src" href="https://github.com/american-desi/knowledge-graph-explorer" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/leader-insights/" target="_blank" rel="noopener" style="--accent:#4ecdc4">
+  <span class="badge" style="background:#4ecdc41a;color:#4ecdc4;border-color:#4ecdc440">FastAPI + React</span>
+  <h3>GlassBox OSINT</h3>
+  <p>Anonymous AI-powered OSINT research</p>
+  <div class="row">
+    <span class="repo">leader-insights</span>
+    <a class="src" href="https://github.com/american-desi/leader-insights" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/llm-insights-hub/" target="_blank" rel="noopener" style="--accent:#4ecdc4">
+  <span class="badge" style="background:#4ecdc41a;color:#4ecdc4;border-color:#4ecdc440">FastAPI + React</span>
+  <h3>LLM Insights Hub</h3>
+  <p>LLM workbench — model evals + prompt libraries</p>
+  <div class="row">
+    <span class="repo">llm-insights-hub</span>
+    <a class="src" href="https://github.com/american-desi/llm-insights-hub" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/mindful-growth/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>BEAUTY</h3>
+  <p>Privacy-first wellbeing + community growth tracker</p>
+  <div class="row">
+    <span class="repo">mindful-growth</span>
+    <a class="src" href="https://github.com/american-desi/mindful-growth" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/neural-net-lab/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Neural Net Lab</h3>
+  <p>NN library from scratch with NumPy + Matplotlib</p>
+  <div class="row">
+    <span class="repo">neural-net-lab</span>
+    <a class="src" href="https://github.com/american-desi/neural-net-lab" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/newshub/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>News-XP Orchestrator</h3>
+  <p>Real-time news aggregation engine</p>
+  <div class="row">
+    <span class="repo">newshub</span>
+    <a class="src" href="https://github.com/american-desi/newshub" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/operating_systems/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Operating Systems</h3>
+  <p>Interactive single-page OS concepts explorer</p>
+  <div class="row">
+    <span class="repo">operating_systems</span>
+    <a class="src" href="https://github.com/american-desi/operating_systems" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/os-portfolio/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>Lattice Journey Portfolio</h3>
+  <p>Portfolio site with interconnected lattice design</p>
+  <div class="row">
+    <span class="repo">os-portfolio</span>
+    <a class="src" href="https://github.com/american-desi/os-portfolio" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/particle-life/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Particle Life</h3>
+  <p>Emergent artificial life simulation</p>
+  <div class="row">
+    <span class="repo">particle-life</span>
+    <a class="src" href="https://github.com/american-desi/particle-life" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/portfoliogpt/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>EduSphere AI</h3>
+  <p>Adaptive personalized learning portfolios</p>
+  <div class="row">
+    <span class="repo">portfoliogpt</span>
+    <a class="src" href="https://github.com/american-desi/portfoliogpt" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/pulse/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Waypoint / Pulse</h3>
+  <p>Anti-screen social quest engine PWA</p>
+  <div class="row">
+    <span class="repo">pulse</span>
+    <a class="src" href="https://github.com/american-desi/pulse" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/quantum-circuit-sim/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Quantum Circuit Simulator</h3>
+  <p>Up to 10 qubits — Grover, QFT, Deutsch-Jozsa</p>
+  <div class="row">
+    <span class="repo">quantum-circuit-sim</span>
+    <a class="src" href="https://github.com/american-desi/quantum-circuit-sim" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/smart-agents/" target="_blank" rel="noopener" style="--accent:#ffd43b">
+  <span class="badge" style="background:#ffd43b1a;color:#ffd43b;border-color:#ffd43b40">Python</span>
+  <h3>Agentic Decisions Lab</h3>
+  <p>Multi-agent orchestration (FastAPI)</p>
+  <div class="row">
+    <span class="repo">smart-agents</span>
+    <a class="src" href="https://github.com/american-desi/smart-agents" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/socialgravity/" target="_blank" rel="noopener" style="--accent:#c39bd3">
+  <span class="badge" style="background:#c39bd31a;color:#c39bd3;border-color:#c39bd340">Swift · iOS</span>
+  <h3>Social Gravity</h3>
+  <p>iOS app exploring social force fields</p>
+  <div class="row">
+    <span class="repo">socialgravity</span>
+    <a class="src" href="https://github.com/american-desi/socialgravity" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/student-portfolio/" target="_blank" rel="noopener" style="--accent:#9b8cd4">
+  <span class="badge" style="background:#9b8cd41a;color:#9b8cd4;border-color:#9b8cd440">Next.js</span>
+  <h3>Student Portfolio</h3>
+  <p>Next.js + Firebase static-export portfolio</p>
+  <div class="row">
+    <span class="repo">student-portfolio</span>
+    <a class="src" href="https://github.com/american-desi/student-portfolio" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/supergravity/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Supergravity</h3>
+  <p>Atlas of Everything — interactive learning environment</p>
+  <div class="row">
+    <span class="repo">supergravity</span>
+    <a class="src" href="https://github.com/american-desi/supergravity" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/tradingai/" target="_blank" rel="noopener" style="--accent:#4ecdc4">
+  <span class="badge" style="background:#4ecdc41a;color:#4ecdc4;border-color:#4ecdc440">FastAPI + React</span>
+  <h3>FinanceMasterAgent</h3>
+  <p>AI chat-first trading assistant</p>
+  <div class="row">
+    <span class="repo">tradingai</span>
+    <a class="src" href="https://github.com/american-desi/tradingai" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/upliftwheel/" target="_blank" rel="noopener" style="--accent:#ff8a5b">
+  <span class="badge" style="background:#ff8a5b1a;color:#ff8a5b;border-color:#ff8a5b40">React · Vite</span>
+  <h3>Spin & Uplift</h3>
+  <p>Mobile-first gamified wellness PWA</p>
+  <div class="row">
+    <span class="repo">upliftwheel</span>
+    <a class="src" href="https://github.com/american-desi/upliftwheel" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/waves/" target="_blank" rel="noopener" style="--accent:#c39bd3">
+  <span class="badge" style="background:#c39bd31a;color:#c39bd3;border-color:#c39bd340">Swift · iOS</span>
+  <h3>Waves</h3>
+  <p>iOS app — Swift + Firebase</p>
+  <div class="row">
+    <span class="repo">waves</span>
+    <a class="src" href="https://github.com/american-desi/waves" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/waves-website/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Waves Website</h3>
+  <p>Marketing site for the Waves app</p>
+  <div class="row">
+    <span class="repo">waves-website</span>
+    <a class="src" href="https://github.com/american-desi/waves-website" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+<a class="card" href="https://american-desi.github.io/wavyboi/" target="_blank" rel="noopener" style="--accent:#66ccff">
+  <span class="badge" style="background:#66ccff1a;color:#66ccff;border-color:#66ccff40">Static · HTML/JS</span>
+  <h3>Synesthete</h3>
+  <p>Camera + audio → abstract generative imagery</p>
+  <div class="row">
+    <span class="repo">wavyboi</span>
+    <a class="src" href="https://github.com/american-desi/wavyboi" target="_blank" rel="noopener" onclick="event.stopPropagation()">view source →</a>
+  </div>
+</a>
+  </div>
   <footer>
-    <p>© 2026 <a href="https://github.com/American-desi">AmericanDesi</a> — Built with care, shipped with intent.</p>
-    <p><a href="https://github.com/American-desi">GitHub</a></p>
+    <span>Built 35 repos overnight · MIT licensed</span>
+    <span><a href="https://github.com/american-desi?tab=repositories">View all repositories →</a></span>
   </footer>
 </div>
-
-<script>
-  // Skill bars on scroll
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.skill-fill').forEach(el => {
-          el.style.width = el.dataset.w + '%';
-        });
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: .3 });
-  observer.observe(document.getElementById('skills'));
-
-  // Card entrance animation
-  const cards = document.querySelectorAll('.card');
-  const cardObserver = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = `fadeUp .6s ease ${i * .1}s both`;
-        cardObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: .15 });
-  cards.forEach(c => cardObserver.observe(c));
-</script>
 </body>
 </html>
